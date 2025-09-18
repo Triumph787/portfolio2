@@ -7,3 +7,4 @@
 
 ## 라이브데모
 - 포폴사이트: https://triumph787.github.io/portfolio2/
+- 테트리스: tetris.html
