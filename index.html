@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 엔지니어 전문가 | 포트폴리오</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--secondary-color);
+            object-fit: cover;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 40px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .project-card {
+            background-color: #f9f9f9;
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .skills-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skills-list li {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .skills-list li:hover {
+            background-color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: #fff;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://via.placeholder.com/150" alt="프로필 사진" class="profile-img">
+            <h1>홍길동</h1>
+            <p>AI 엔지니어 | 딥러닝 & 머신러닝 전문가</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="about" class="section fade-in-section">
+            <h2>자기소개 🙋‍♂️</h2>
+            <p>안녕하세요! 저는 인공지능 기술을 통해 복잡한 문제를 해결하는 데 열정을 가진 AI 엔지니어 홍길동입니다. 딥러닝, 머신러닝 모델 개발부터 배포까지 전 과정에 대한 깊은 이해를 바탕으로 효율적이고 혁신적인 솔루션을 제공합니다.</p>
+            <p>특히, 자연어 처리(NLP), 컴퓨터 비전(Computer Vision) 분야에 강점을 가지고 있으며, 최신 논문을 꾸준히 연구하며 기술 트렌드를 주도적으로 따라가고 있습니다.</p>
+        </section>
+
+        <section id="skills" class="section fade-in-section">
+            <h2>기술 스택 🛠️</h2>
+            <ul class="skills-list">
+                <li>Python</li>
+                <li>TensorFlow</li>
+                <li>PyTorch</li>
+                <li>Scikit-learn</li>
+                <li>Pandas</li>
+                <li>Numpy</li>
+                <li>Docker</li>
+                <li>Kubernetes</li>
+                <li>AWS</li>
+                <li>Git/GitHub</li>
+                <li>SQL</li>
+                <li>FastAPI</li>
+            </ul>
+        </section>
+
+        <section id="projects" class="section fade-in-section">
+            <h2>프로젝트 🚀</h2>
+            <div class="project-card">
+                <h3>주식 시장 예측 딥러닝 모델</h3>
+                <p><strong>기술:</strong> PyTorch, LSTM, Pandas, Matplotlib</p>
+                <p>주식 데이터를 활용해 미래 주가를 예측하는 딥러닝 모델을 개발했습니다. LSTM 모델을 사용하여 시계열 데이터의 특징을 학습하고, 높은 정확도로 시장 동향을 예측했습니다.</p>
+                <a href="https://github.com/your-username/stock-prediction" target="_blank">➡️ GitHub에서 보기</a>
+            </div>
+            <div class="project-card">
+                <h3>이미지 기반 객체 인식 시스템</h3>
+                <p><strong>기술:</strong> TensorFlow, YOLOv5, OpenCV</p>
+                <p>실시간으로 이미지 내의 객체를 감지하고 분류하는 시스템을 구축했습니다. YOLOv5 모델을 Fine-tuning하여 특정 객체에 대한 인식 정확도를 크게 향상시켰습니다.</p>
+                <a href="https://github.com/your-username/object-detection" target="_blank">➡️ GitHub에서 보기</a>
+            </div>
+        </section>
+
+        <section id="contact" class="section fade-in-section">
+            <h2>연락처 ✉️</h2>
+            <p>📧 이메일: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+            <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/your-profile" target="_blank">linkedin.com/in/your-profile</a></p>
+            <p>🌐 GitHub: <a href="https://github.com/your-username" target="_blank">github.com/your-username</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 홍길동. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
