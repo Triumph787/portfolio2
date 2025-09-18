@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>총알 피하기 게임</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #2d3748;
+            border: 2px solid #4a5568;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background-color: #1a202c;
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem;
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            display: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex justify-center items-center h-screen overflow-hidden p-4">
+    <div class="game-container max-w-lg w-full">
+        <h1 class="text-4xl font-bold mb-4 text-center text-teal-400 drop-shadow-lg">총알 피하기 게임</h1>
+        <div id="game-info" class="w-full text-lg font-semibold rounded-lg flex justify-between p-4 bg-gray-800 shadow-inner">
+            <span>점수: <span id="score">0</span></span>
+            <span>라이프: <span id="lives">3</span></span>
+        </div>
+        <canvas id="gameCanvas" width="500" height="500" class="rounded-xl shadow-lg"></canvas>
+        <button id="restartBtn" class="mt-4 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400">
+            재시작
+        </button>
+    </div>
+    <div id="message-box" class="hidden">
+        <p id="message-text"></p>
+    </div>
+
+    <script>
+        // 전역 변수
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const restartBtn = document.getElementById('restartBtn');
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
+
+        // 게임 상태 변수
+        let gameLoop;
+        let isGameOver = false;
+        let score = 0;
+        let lives = 3;
+
+        // 플레이어
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            size: 20,
+            speed: 5,
+            dx: 0,
+            dy: 0,
+            draw() {
+                ctx.fillStyle = '#63b3ed'; // 플레이어 색상
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            },
+            update() {
+                this.x += this.dx;
+                // 경계선 충돌 방지
+                if (this.x < 0) this.x = 0;
+                if (this.x > canvas.width) this.x = canvas.width;
+            }
+        };
+
+        // 총알
+        const bullets = [];
+        const bulletSpeed = 3;
+        const bulletSpawnRate = 60; // 프레임 단위
+        let bulletSpawnCounter = 0;
+
+        function createBullet() {
+            const size = Math.random() * 10 + 5;
+            const x = Math.random() * canvas.width;
+            const y = -size;
+            const speedY = bulletSpeed + score / 100; // 점수에 따라 속도 증가
+            bullets.push({ x, y, size, speedY });
+        }
+
+        function drawBullets() {
+            ctx.fillStyle = '#f56565'; // 총알 색상
+            bullets.forEach(bullet => {
+                ctx.beginPath();
+                ctx.arc(bullet.x, bullet.y, bullet.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function updateBullets() {
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                bullet.y += bullet.speedY;
+                
+                // 총알이 화면 밖으로 나갔는지 확인
+                if (bullet.y > canvas.height + bullet.size) {
+                    bullets.splice(i, 1);
+                    score++;
+                    scoreElement.innerText = score;
+                }
+            }
+        }
+
+        // 충돌 감지
+        function detectCollisions() {
+            bullets.forEach(bullet => {
+                const distance = Math.sqrt(Math.pow(player.x - bullet.x, 2) + Math.pow(player.y - bullet.y, 2));
+                if (distance < (player.size / 2) + (bullet.size / 2)) {
+                    lives--;
+                    livesElement.innerText = lives;
+                    // 총알을 제거하여 충돌이 한 번만 일어나도록 함
+                    const index = bullets.indexOf(bullet);
+                    if (index > -1) {
+                        bullets.splice(index, 1);
+                    }
+                    if (lives <= 0) {
+                        gameOver();
+                    }
+                }
+            });
+        }
+        
+        // 게임 오버 처리
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameLoop);
+            showMessage(`게임 오버! 점수: ${score}`);
+        }
+
+        // 메시지 표시
+        function showMessage(text) {
+            messageText.innerText = text;
+            messageBox.style.display = 'block';
+        }
+
+        // 게임 초기화
+        function init() {
+            score = 0;
+            lives = 3;
+            isGameOver = false;
+            bullets.length = 0;
+            bulletSpawnCounter = 0;
+            player.x = canvas.width / 2;
+            scoreElement.innerText = score;
+            livesElement.innerText = lives;
+            messageBox.style.display = 'none';
+        }
+
+        // 게임 루프
+        function gameLoopFn() {
+            if (isGameOver) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            player.update();
+            player.draw();
+
+            updateBullets();
+            drawBullets();
+
+            detectCollisions();
+
+            bulletSpawnCounter++;
+            if (bulletSpawnCounter >= bulletSpawnRate) {
+                createBullet();
+                bulletSpawnCounter = 0;
+            }
+        }
+
+        // 이벤트 리스너
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Right') {
+                player.dx = player.speed;
+            } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = -player.speed;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Right' || e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = 0;
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            init();
+            gameLoop = setInterval(gameLoopFn, 1000 / 60); // 60 FPS
+        });
+
+        // 초기 시작
+        window.onload = function() {
+            init();
+            gameLoop = setInterval(gameLoopFn, 1000 / 60); // 60 FPS
+        };
+
+    </script>
+</body>
+</html>
